@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using KayaStation.WebAPI.Models;
 using KayaStation.WebAPI.Models.ManageViewModels;
 using KayaStation.WebAPI.Services;
+using KayaStation.DAL.Models;
 
 namespace KayaStation.WebAPI.Controllers
 {

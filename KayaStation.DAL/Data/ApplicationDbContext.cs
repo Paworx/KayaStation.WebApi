@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using KayaStation.WebAPI.Models;
+using KayaStation.DAL.Models;
 
-namespace KayaStation.WebAPI.Data
+namespace KayaStation.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

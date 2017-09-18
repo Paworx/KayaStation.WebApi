@@ -17,6 +17,7 @@ using KayaStation.DAL.Models;
 
 namespace KayaStation.API.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller

@@ -3,26 +3,26 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:52180/",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:49690/",
+      "sslPort": 44350
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:52180/",
+      "launchUrl": "https://localhost:44350/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "KayaStation.WebAPI": {
+    "KayaStation.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:52181/"
+      "applicationUrl": "http://localhost:49691/"
     }
   }
 }

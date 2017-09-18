@@ -10,12 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using KayaStation.WebAPI.Models;
-using KayaStation.WebAPI.Models.AccountViewModels;
-using KayaStation.WebAPI.Services;
-using KayaStation.DAL.Models;
+using KayaStation.API.Models;
+using KayaStation.API.Models.AccountViewModels;
+using KayaStation.API.Services;
 
-namespace KayaStation.WebAPI.Controllers
+namespace KayaStation.API.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]
@@ -215,7 +214,7 @@ namespace KayaStation.WebAPI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -243,7 +242,7 @@ namespace KayaStation.WebAPI.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -356,7 +355,7 @@ namespace KayaStation.WebAPI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -402,7 +401,7 @@ namespace KayaStation.WebAPI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)

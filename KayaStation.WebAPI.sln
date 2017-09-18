@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KayaStation.WebAPI", "KayaStation.WebAPI\KayaStation.WebAPI.csproj", "{05587184-C9AB-472B-9944-651B320535F5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KayaStation.DAL", "KayaStation.DAL\KayaStation.DAL.csproj", "{354EA753-9F08-45C4-8174-AB2625610BCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KayaStation.API", "KayaStation.API\KayaStation.API.csproj", "{C46DFE06-90CF-4303-A43C-7E52D63A5C23}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{05587184-C9AB-472B-9944-651B320535F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05587184-C9AB-472B-9944-651B320535F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05587184-C9AB-472B-9944-651B320535F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05587184-C9AB-472B-9944-651B320535F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{354EA753-9F08-45C4-8174-AB2625610BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{354EA753-9F08-45C4-8174-AB2625610BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{354EA753-9F08-45C4-8174-AB2625610BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU

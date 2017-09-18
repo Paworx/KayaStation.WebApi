@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using KayaStation.API.Data;
-using KayaStation.API.Models;
 using KayaStation.API.Services;
+using KayaStation.DAL;
+using KayaStation.DAL.Models;
 
 namespace KayaStation.API
 {

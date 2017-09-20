@@ -11,8 +11,7 @@ using KayaStation.DAL.Models;
 namespace KayaStation.API.Controllers.API
 {
     [Produces("application/json")]
-    //[Route("api/Hotels/[action]")]
-    [Route("api/[controller]/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     public class HotelsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,14 +21,12 @@ namespace KayaStation.API.Controllers.API
             _context = context;
         }
 
-        // GET: api/Hotels
         [HttpGet]
         public IEnumerable<Hotel> GetAll()
         {
             return _context.Hotels;
         }
 
-        // GET: api/Hotels/5
         [HttpGet]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
@@ -48,7 +45,6 @@ namespace KayaStation.API.Controllers.API
             return Ok(hotel);
         }
 
-        // POST: api/Hotels
         [HttpPost]
         public async Task<IActionResult> PostHotel([FromBody] Hotel hotel)
         {

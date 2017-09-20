@@ -14,54 +14,109 @@ namespace KayaStation.API.Controllers.API
     [Route("api/v1/[controller]/[action]")]
     public class HotelsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public HotelsController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
         [HttpGet]
         public IEnumerable<Hotel> GetAll()
         {
-            return _context.Hotels;
+            //EAGER LOADED 
+            var data = db.Hotels
+                .Include(h => h.Rooms)
+                .AsNoTracking()
+                .ToList();
+
+            return data;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        [HttpGet("{id}")]
+        public async Task<Hotel> GetById([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var hotel = await _context.Hotels.SingleOrDefaultAsync(m => m.Id == id);
+            var hotel = await db.Hotels.SingleOrDefaultAsync(m => m.Id == id);
 
             if (hotel == null)
             {
-                return NotFound();
+                return null;
             }
 
-            return Ok(hotel);
+            //EXPLICIT LOAD RELATED DATA
+            db.Entry(hotel)
+                .Collection(h => h.Rooms)
+                .Load();
+
+            return hotel;
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostHotel([FromBody] Hotel hotel)
+        public async Task<IActionResult> Post([FromBody] Hotel hotel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Hotels.Add(hotel);
-            await _context.SaveChangesAsync();
+            db.Hotels.Add(hotel);
+            await db.SaveChangesAsync();
 
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
         }
 
+        [HttpPost("{id}")]
+        public async Task<IActionResult> PutRoom([FromRoute] int id, [FromBody] Hotel room)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != room.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(room).State = EntityState.Modified;
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!HotelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
+        {
+            var hotel = db.Hotels
+                .Include(h => h.Rooms)
+                .FirstOrDefault(h => h.Id == id);
+
+            if (hotel == null)
+                return NotFound();
+
+            db.Hotels.Remove(hotel);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+
         private bool HotelExists(int id)
         {
-            return _context.Hotels.Any(e => e.Id == id);
+            return db.Hotels.Any(e => e.Id == id);
         }
     }
 }

@@ -94,7 +94,7 @@ namespace KayaStation.DAL.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("HotelId");
+                    b.Property<int?>("HotelId");
 
                     b.Property<bool>("IsDeactivated");
 
@@ -221,8 +221,7 @@ namespace KayaStation.DAL.Migrations
                 {
                     b.HasOne("KayaStation.DAL.Models.Hotel", "Hotel")
                         .WithMany("Rooms")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("HotelId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

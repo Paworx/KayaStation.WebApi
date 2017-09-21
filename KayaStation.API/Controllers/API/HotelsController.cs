@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KayaStation.DAL;
 using KayaStation.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KayaStation.API.Controllers.API
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/v1/[controller]/[action]")]
     public class HotelsController : Controller

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KayaStation.API.Controllers.API
 {
-    [Authorize]
     [Produces("application/json")]
     [Route("api/v1/[controller]/[action]")]
     public class HotelsController : Controller
@@ -68,19 +67,19 @@ namespace KayaStation.API.Controllers.API
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Hotel room)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Hotel hotel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != room.Id)
+            if (id != hotel.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(room).State = EntityState.Modified;
+            db.Entry(hotel).State = EntityState.Modified;
 
             try
             {
@@ -114,6 +113,48 @@ namespace KayaStation.API.Controllers.API
             db.Hotels.Remove(hotel);
             await db.SaveChangesAsync();
             return NoContent();
+        }
+
+
+        //ROOM?FUCK
+        [HttpPost("{id}")]
+        public async Task<IActionResult> AddRoom([FromRoute] int id, [FromBody] Room  room)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var hotel = db.Hotels
+                            .Include(h => h.Rooms)
+                            .FirstOrDefault(h => h.Id == id);
+
+            if (hotel == null)
+                return NotFound();
+
+            hotel.Rooms.Add(room);
+            await db.SaveChangesAsync();
+            return CreatedAtAction("GetHotel", new { id = id }, hotel);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteRoom([FromRoute] int id, [FromBody] Room room)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var hotel = db.Hotels
+                            .Include(h => h.Rooms)
+                            .FirstOrDefault(h => h.Id == id);
+
+            if (hotel == null)
+                return NotFound();
+
+            hotel.Rooms.Add(room);
+            await db.SaveChangesAsync();
+            return CreatedAtAction("GetHotel", new { id = id }, hotel);
         }
 
         private bool HotelExists(int id)

@@ -52,7 +52,7 @@ namespace KayaStation.API.Controllers.API
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Hotel hotel)
+        public async Task<IActionResult> Add([FromBody] Hotel hotel)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace KayaStation.API.Controllers.API
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> PutRoom([FromRoute] int id, [FromBody] Hotel room)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Hotel room)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace KayaStation.API.Controllers.API
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!HotelExists(id))
                 {

@@ -11,7 +11,6 @@ namespace KayaStation.Core.Models
         public string Name { get; set; }
         public RoomType Type { get; set; }
         public decimal Price { get; set; }
-        public bool IsDeactivated { get; set; }
 
         [JsonIgnore]
         public virtual Hotel Hotel { get; set; }

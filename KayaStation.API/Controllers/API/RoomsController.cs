@@ -2,31 +2,28 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using KayaStation.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using KayaStation.Core.Data;
 
 namespace KayaStation.API.Controllers.API
 {
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
-    public class HotelsController : Controller
+    public class RoomsController : Controller
     {
         private readonly ApplicationDbContext db;
 
-        public HotelsController(ApplicationDbContext context)
+        public RoomsController(ApplicationDbContext context)
         {
             db = context;
-
-
         }
 
         [HttpGet("")]
-        public IEnumerable<Hotel> GetAll()
+        public IEnumerable<Room> GetAll()
         {
             //EAGER LOADED 
-            var data = db.Hotels
-                .Include(h => h.Rooms)
+            var data = db.Rooms
                 .AsNoTracking()
                 .ToList();
 
@@ -34,35 +31,30 @@ namespace KayaStation.API.Controllers.API
         }
 
         [HttpGet("{id}")]
-        public async Task<Hotel> GetById([FromRoute] int id)
+        public async Task<Room> GetById([FromRoute] int id)
         {
-            var hotel = await db.Hotels.SingleOrDefaultAsync(m => m.Id == id);
+            var room = await db.Rooms.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (hotel == null)
+            if (room == null)
             {
                 return null;
             }
 
-            //EXPLICIT LOAD RELATED DATA
-            db.Entry(hotel)
-                .Collection(h => h.Rooms)
-                .Load();
-
-            return hotel;
+            return room;
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Add([FromBody] Hotel value)
+        public async Task<IActionResult> Add([FromBody] Room value)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Hotels.Add(value);
+            db.Rooms.Add(value);
             await db.SaveChangesAsync();
 
-            return CreatedAtAction("GetHotel", new { id = value.Id }, value);
+            return CreatedAtAction("","Rooms", new { id = value.Id }, value);
         }
 
         [HttpPost("update/{id}")]
@@ -86,7 +78,7 @@ namespace KayaStation.API.Controllers.API
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                if (!HotelExists(id))
+                if (!RoomExists(id))
                 {
                     return NotFound();
                 }
@@ -102,21 +94,20 @@ namespace KayaStation.API.Controllers.API
         [HttpPost("delete/{id}")]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            var hotel = db.Hotels
-                .Include(h => h.Rooms)
+            var room = db.Rooms
                 .FirstOrDefault(h => h.Id == id);
 
-            if (hotel == null)
+            if (room == null)
                 return NotFound();
 
-            db.Hotels.Remove(hotel);
+            db.Rooms.Remove(room);
             await db.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool HotelExists(int id)
+        private bool RoomExists(int id)
         {
-            return db.Hotels.Any(e => e.Id == id);
+            return db.Rooms.Any(e => e.Id == id);
         }
     }
 }

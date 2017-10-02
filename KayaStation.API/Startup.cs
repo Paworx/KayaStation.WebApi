@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -9,12 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using KayaStation.API.Services;
-using KayaStation.DAL;
-using KayaStation.DAL.Models;
 using KayaStation.API.Auth;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using KayaStation.Core.Data;
+using KayaStation.Core.Models;
 
 namespace KayaStation.API
 {
@@ -48,7 +45,7 @@ namespace KayaStation.API
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                //ClockSkew = TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero,
 
                 ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
                 ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
@@ -80,15 +77,7 @@ namespace KayaStation.API
                             }
                         };
                     });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Member",
-                    policy => policy.RequireClaim("MembershipId"));
-            }); 
             #endregion
-
-
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();

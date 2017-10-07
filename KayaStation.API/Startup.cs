@@ -36,7 +36,7 @@ namespace KayaStation.API
                 .AddDefaultTokenProviders();
 
             #region AUTH
-            // jwt wire up
+            // jwt wire ups
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -58,7 +58,11 @@ namespace KayaStation.API
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             });
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(o =>
+                    {
+                        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
                     .AddJwtBearer(options =>
                     {
                         options.TokenValidationParameters = tokenValidationParameters;
@@ -74,7 +78,7 @@ namespace KayaStation.API
                             {
                                 Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
                                 return Task.CompletedTask;
-                            }
+                            },
                         };
                     });
             #endregion

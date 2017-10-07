@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using KayaStation.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using KayaStation.Core.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KayaStation.API.Controllers.API
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
     public class RoomsController : Controller

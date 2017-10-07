@@ -5,9 +5,7 @@ VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KayaStation.API", "KayaStation.API\KayaStation.API.csproj", "{C46DFE06-90CF-4303-A43C-7E52D63A5C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KayaStation.Core", "KayaStation.Core\KayaStation.Core.csproj", "{FE946FBF-934D-4760-AD98-51396D96DEBE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KayaStation.Auth", "KayaStation.Auth\KayaStation.Auth.csproj", "{609FABD7-898E-4AA0-B2AE-54D56164DE31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KayaStation.Core", "KayaStation.Core\KayaStation.Core.csproj", "{FE946FBF-934D-4760-AD98-51396D96DEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{FE946FBF-934D-4760-AD98-51396D96DEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE946FBF-934D-4760-AD98-51396D96DEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE946FBF-934D-4760-AD98-51396D96DEBE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{609FABD7-898E-4AA0-B2AE-54D56164DE31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{609FABD7-898E-4AA0-B2AE-54D56164DE31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{609FABD7-898E-4AA0-B2AE-54D56164DE31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{609FABD7-898E-4AA0-B2AE-54D56164DE31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,8 +19,6 @@ namespace KayaStation.API.Controllers.API
         public HotelsController(ApplicationDbContext context)
         {
             db = context;
-
-
         }
 
         [HttpGet("")]

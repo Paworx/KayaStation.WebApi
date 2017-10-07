@@ -8,6 +8,8 @@ using System.Security.Claims;
 using KayaStation.API.Auth;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Authorization;
+using KayaStation.Core.Data;
+using KayaStation.API.Models;
 
 namespace KayaStation.API.Controllers.API
 {
@@ -15,16 +17,20 @@ namespace KayaStation.API.Controllers.API
     [Route("api/v1/[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger _logger;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ILogger logger;
+        private readonly ApplicationDbContext db;
+
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            ILogger<AccountController> logger
+            ILogger<AccountController> logger,
+            ApplicationDbContext dbContext
             )
         {
-            _userManager = userManager;
-            _logger = logger;
+            this.userManager = userManager;
+            this.logger = logger;
+            this.db = dbContext;
         }
 
         [AllowAnonymous]
@@ -37,16 +43,31 @@ namespace KayaStation.API.Controllers.API
             }
 
             var userIdentity = new ApplicationUser { UserName = model.Email, Email = model.Email };
-            var result = await _userManager.CreateAsync(userIdentity, model.Password);
+
+            var result = await userManager.CreateAsync(userIdentity, model.Password);
 
             if (!result.Succeeded) return new BadRequestObjectResult(ErrorHelper.AddErrorsToModelState(result, ModelState));
+
+            if(model.IsHotelOwner) // OWNER ONLY
+            {
+                userIdentity.IsHotelOwner = true;
+                userManager.UpdateAsync(userIdentity).Wait();
+
+                var hotel = new Hotel();
+                hotel.Name = model.HotelName;
+                hotel.OwnerId = userIdentity.Id;
+
+                db.Hotels.Add(hotel);
+                db.SaveChanges();
+            }
 
             return new OkResult();
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Authenticate([FromBody]LoginViewModel model)
+        [ProducesResponseType(typeof(Token), 200)]
+        public async Task<IActionResult> AuthToken([FromBody]LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,8 +88,8 @@ namespace KayaStation.API.Controllers.API
                                 .AddClaim("MembershipId", "111")
                                 .AddExpiry(12)
                                 .Build();
-            var tokenResponse = new { token = token.Value, expiresIn= token.ValidTo};
-            return Ok(tokenResponse);
+            var tokenRes = new Token { RequestToken = token.Value, ExpiresIn= token.ValidTo};
+            return Ok(tokenRes);
         }
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
@@ -76,12 +97,12 @@ namespace KayaStation.API.Controllers.API
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 // get the user to verifty
-                var userToVerify = await _userManager.FindByNameAsync(userName);
+                var userToVerify = await userManager.FindByNameAsync(userName);
 
                 if (userToVerify != null)
                 {
                     // check the credentials  
-                    if (await _userManager.CheckPasswordAsync(userToVerify, password))
+                    if (await userManager.CheckPasswordAsync(userToVerify, password))
                     {
                         return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
                     }

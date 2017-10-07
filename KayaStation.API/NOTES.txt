@@ -24,6 +24,6 @@ https://wildermuth.com/2017/08/19/Two-AuthorizationSchemes-in-ASP-NET-Core-2
 https://fullstackmark.com/post/10/user-authentication-with-angular-and-asp-net-core#create-new-users
 http://www.c-sharpcorner.com/article/handle-refresh-token-using-asp-net-core-2-0-and-json-web-token/
 https://andrewlock.net/automatically-validating-anti-forgery-tokens-in-asp-net-core-with-the-autovalidateantiforgerytokenattribute/
-
+https://www.codeproject.com/Tips/1208535/WebControls/
 EF
 

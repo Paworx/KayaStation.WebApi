@@ -51,6 +51,25 @@ namespace KayaStation.API.Controllers.API
             return hotel;
         }
 
+        [HttpGet()]
+        public async Task<Hotel> GetByCurrentUser()
+        {
+            var userid = User.Claims.FirstOrDefault(c => c.Type == "uid");
+            var hotel = await db.Hotels.SingleOrDefaultAsync(m => m.OwnerId == userid.Value);
+
+            if (hotel == null)
+            {
+                return null;
+            }
+
+            //EXPLICIT LOAD RELATED DATA
+            db.Entry(hotel)
+                .Collection(h => h.Rooms)
+                .Load();
+
+            return hotel;
+        }
+
         [HttpPost()]
         public async Task<IActionResult> Add([FromBody] Hotel value)
         {

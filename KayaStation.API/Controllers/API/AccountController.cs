@@ -7,6 +7,7 @@ using KayaStation.API.Models.AccountViewModels;
 using System.Security.Claims;
 using KayaStation.API.Auth;
 using System.Security.Principal;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using KayaStation.Core.Data;
 using KayaStation.API.Models;
@@ -79,13 +80,13 @@ namespace KayaStation.API.Controllers.API
             {
                 return BadRequest(ErrorHelper.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
-            
+            string userId = identity.Claims.FirstOrDefault(c => c.Type == "id").Value;
             var token = new JwtTokenBuilder()
                                 .AddSecurityKey(JwtSecurityKey.Create("powerx-key-powerx-key-powerx-key-powerx-key"))
                                 .AddSubject(identity.Name)
                                 .AddIssuer("kayaStationIndentityServer")
                                 .AddAudience("kayaStationIndentityClient")
-                                .AddClaim("MembershipId", "111")
+                                .AddClaim("uid", userId)
                                 .AddExpiry(120)
                                 .Build();
             var tokenRes = new Token { RequestToken = token.Value, ExpiresIn= token.ValidTo};

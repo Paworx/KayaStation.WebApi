@@ -11,7 +11,7 @@ namespace KayaStation.API.Controllers.API
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]/[action]")]
     public class RoomsController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -21,7 +21,7 @@ namespace KayaStation.API.Controllers.API
             db = context;
         }
 
-        [HttpGet("")]
+        [HttpGet()]
         public IEnumerable<Room> GetAll()
         {
             //EAGER LOADED 
@@ -45,7 +45,7 @@ namespace KayaStation.API.Controllers.API
             return room;
         }
 
-        [HttpPost("")]
+        [HttpPost()]
         public async Task<IActionResult> Add([FromBody] Room value)
         {
             if (!ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace KayaStation.API.Controllers.API
             return CreatedAtAction("","Rooms", new { id = value.Id }, value);
         }
 
-        [HttpPost("update/{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Hotel value)
         {
             if (!ModelState.IsValid)
@@ -93,7 +93,7 @@ namespace KayaStation.API.Controllers.API
             return NoContent();
         }
 
-        [HttpPost("delete/{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
             var room = db.Rooms

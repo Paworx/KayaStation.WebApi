@@ -35,6 +35,14 @@ namespace KayaStation.API
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(c => {
+                c.AddPolicy("CorsPolicy",
+                            builder => builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
+            });
+
             #region AUTH
             // jwt wire ups
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
@@ -59,28 +67,14 @@ namespace KayaStation.API
                 options.SigningCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             });
             services.AddAuthentication(o =>
-                    {
-                        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    })
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = tokenValidationParameters;
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnAuthenticationFailed = context =>
-                            {
-                                Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                                return Task.CompletedTask;
-                            },
-                            OnTokenValidated = context =>
-                            {
-                                Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                                return Task.CompletedTask;
-                            },
-                        };
-                    });
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = tokenValidationParameters;
+            });
             #endregion
 
             // Add application services.
@@ -90,6 +84,7 @@ namespace KayaStation.API
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Kaya Station API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new Swashbuckle.AspNetCore.Swagger.ApiKeyScheme() { In = "header", Description = "Please insert JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
             });
+
             services.AddMvc();
         }
 
@@ -107,6 +102,7 @@ namespace KayaStation.API
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

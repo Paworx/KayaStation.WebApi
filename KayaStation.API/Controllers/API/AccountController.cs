@@ -86,7 +86,7 @@ namespace KayaStation.API.Controllers.API
                                 .AddIssuer("kayaStationIndentityServer")
                                 .AddAudience("kayaStationIndentityClient")
                                 .AddClaim("MembershipId", "111")
-                                .AddExpiry(12)
+                                .AddExpiry(120)
                                 .Build();
             var tokenRes = new Token { RequestToken = token.Value, ExpiresIn= token.ValidTo};
             return Ok(tokenRes);

@@ -60,7 +60,7 @@ namespace KayaStation.API.Controllers.API
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Hotel value)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Room value)
         {
             if (!ModelState.IsValid)
             {
